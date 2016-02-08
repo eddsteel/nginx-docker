@@ -1,0 +1,14 @@
+[Unit]
+Description=Nginx container
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker run -i --rm --name website -p 80:80 -p 443:443 -v /srv/www:/etc/nginx/html -v /etc/nginx/sites-enabled:/etc/nginx/sites-enabled -v /etc/letsencrypt/live/eddsteel.com:/etc/nginx/ssl -v /etc/nginx/sites-available:/etc/nginx/sites-available -v /etc/letsencrypt/archive:/etc/archive website
+
+
+ExecStop=/usr/bin/docker stop -t 2 website && /usr/bin/docker rm website
+
+[Install]
+WantedBy=local.target
